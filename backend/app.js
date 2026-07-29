@@ -8,7 +8,7 @@ require("./models");
 const applicationsRouter = require("./routes/applications");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(morgan("dev"));
