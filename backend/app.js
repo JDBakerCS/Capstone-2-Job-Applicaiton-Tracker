@@ -17,9 +17,9 @@ app.use(cors());
 app.use("/api/applications", applicationsRouter);
 
 
-function errorHandler(err, req, res, next) {
-  console.error(err);
-  res.status(500).json({ error: err.message || "Server Error" });
+function errorHandler(error, req, res, next) {
+  console.error(error);
+  res.status(500).json({ error: error.message || "Server Error" });
 }
 
 app.use(errorHandler);
