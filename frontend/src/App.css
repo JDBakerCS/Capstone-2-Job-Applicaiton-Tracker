@@ -16,7 +16,8 @@
 
 .home-page-hero {
   display: flex;
-  flex-direction: left;
+  flex-direction: row;
+  align-items: center;
 }
 
 .home-page__eyebrow {
@@ -31,6 +32,7 @@
 .home-hero__total-card {
   min-width: 180px;
   padding: 18px;
+  margin-left: auto;
   border-radius: 16px;
   background: #314652;
   color: #f5efe3;
@@ -39,6 +41,7 @@
   justify-content: center;
   text-align: center;
 }
+
 .total-card__label {
   margin: 0 0 8px;
   font-size: 0.9rem;
@@ -51,10 +54,44 @@
   font-size: 2rem;
   font-weight: 800;
 }
+
 .home-page-hero h1,
 .panel h2,
 .applications-dashboard h2 {
   margin-top: 0;
+}
+
+.create-application-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 24px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 12px;
+  background: #d9ccb7;
+  color: #22313a;
+  text-decoration: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(31, 41, 51, 0.08);
+}
+
+.create-application-button:hover,
+.create-application-button:focus-visible {
+  background: #cbb89a;
+  outline: 2px solid #314652;
+  outline-offset: 2px;
+}
+
+.home-hero__action-card,
+.create-application-button {
+  min-width: 180px;
+  min-height: 105px;
+  padding: 18px;
+  border-radius: 16px;
+  text-align: center;
 }
 
 .lead {

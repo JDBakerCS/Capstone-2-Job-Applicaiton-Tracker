@@ -118,7 +118,9 @@ function NewApplicationPage() {
                         rows="7"
                     />
 
-                    <button type="submit">Create application</button>
+                    <button type="submit" className="create-application-button">
+                        Create application
+                    </button>
                 </form>
             </section>
         </main>
