@@ -28,7 +28,6 @@ function ApplicationPage() {
         <main className="home-page">
             <section className="home-page-hero">
                 <div>
-
                     <p className="home-hero__eyebrow">Capstone II</p>
                     <h1>Job Application Tracker</h1>
                     <p className="lead">
@@ -40,6 +39,9 @@ function ApplicationPage() {
                     <p className="total-card__label">Total applications</p>
                     <p className="total-card__value">{applications.length}</p>
                 </aside>
+                <Link to="/create" className="create-application-button">
+                    Create application
+                </Link>
 
             </section>
 
@@ -61,7 +63,10 @@ function ApplicationPage() {
                             <span>{application.role}</span>
                             <span className="status-pill">{application.status}</span>
                             <span>{new Date(application.updatedAt).toLocaleDateString()}</span>
-                            <Link to={`/applications/${application.id}`} className="details-link">
+                            <Link
+                                to={`/applications/${application.id}`}
+                                className="details-link"
+                            >
                                 View details
                             </Link>
                         </li>
