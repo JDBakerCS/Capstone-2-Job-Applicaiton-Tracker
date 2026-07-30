@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 function ApplicationPage() {
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true);
+
+
     useEffect(() => {
         async function getApplications() {
             try {
@@ -15,8 +17,8 @@ function ApplicationPage() {
                     [...response.data].sort((a, b) => b.id - a.id);
 
                 setApplications(sortEarliestFirstApplications);
-            } catch (err) {
-                console.error(err);
+            } catch (error) {
+                console.error(error);
             }
         }
         getApplications();
@@ -25,12 +27,20 @@ function ApplicationPage() {
     return (
         <main className="home-page">
             <section className="home-page-hero">
-                <p className="home-hero__eyebrow">Capstone II</p>
-                <h1>Job Application Tracker</h1>
-                <p className="lead">
-                    Track where you applied, what stage each application is in, and what
-                    to do next.
-                </p>
+                <div>
+
+                    <p className="home-hero__eyebrow">Capstone II</p>
+                    <h1>Job Application Tracker</h1>
+                    <p className="lead">
+                        Track where you applied, what stage each application is in, and what
+                        to do next.
+                    </p>
+                </div>
+                <aside className="home-hero__total-card" aria-label="Application summary">
+                    <p className="total-card__label">Total applications</p>
+                    <p className="total-card__value">{applications.length}</p>
+                </aside>
+
             </section>
 
             <section className="applications-dashboard" aria-labelledby="applications-heading">

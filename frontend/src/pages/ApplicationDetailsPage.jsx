@@ -14,14 +14,14 @@ function ApplicationDetailsPage() {
         setError("");
 
         const response = await axios.get(
-          `http://localhost:3001/api/applications/${id}`
+          `http://localhost:3000/api/applications/${id}`
         );
 
         setApplication(response.data);
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
 
-        if (err.response?.status === 404) {
+        if (error.response?.status === 404) {
           setError("Application not found.");
         } else {
           setError("Something went wrong while loading this application.");

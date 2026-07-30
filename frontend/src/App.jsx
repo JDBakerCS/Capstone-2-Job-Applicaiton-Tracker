@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import ApplicationPage from "./pages/ApplicationPage";
 import ApplicationDetailsPage from "./pages/ApplicationDetailsPage"
+import NotFoundPage from "./pages/NotFoundPage"
 import "./App.css";
 
 function App() {
