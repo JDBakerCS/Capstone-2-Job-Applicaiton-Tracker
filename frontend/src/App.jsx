@@ -11,6 +11,7 @@ function App() {
         path="/applications/:id"
         element={<ApplicationDetailsPage/>}
         />
+      <Route path="*" element={<NotFoundPage/>}/>
     </Routes>
   )
 }
