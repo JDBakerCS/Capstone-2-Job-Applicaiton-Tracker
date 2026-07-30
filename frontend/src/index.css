@@ -15,3 +15,88 @@ body {
   background: linear-gradient(180deg, #f7f4ef 0%, #eef3f8 100%);
   color: #1f2933;
 }
+.details-page {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: 48px 20px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: #314652;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  text-decoration: underline;
+}
+
+.details-card {
+  padding: 28px;
+  border-radius: 20px;
+  background: #314652;
+  color: #f5efe3;
+  box-shadow: 0 12px 30px rgba(31, 41, 51, 0.12);
+}
+
+.details-eyebrow {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #d8cbb8;
+}
+
+.details-card h1 {
+  margin: 0;
+}
+
+.details-role {
+  margin: 10px 0 24px;
+  font-size: 1.1rem;
+  color: #e7dccd;
+}
+
+.details-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.details-meta-block {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(245, 239, 227, 0.12);
+}
+
+.details-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #d8cbb8;
+}
+
+.notes-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: #f6efe4;
+  color: #22313a;
+}
+
+.notes-card h2 {
+  margin-top: 0;
+}
+
+.details-message {
+  width: min(700px, 100%);
+  margin: 48px auto;
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.88);
+}
