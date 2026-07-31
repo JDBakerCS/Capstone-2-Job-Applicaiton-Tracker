@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { FaPen } from "react-icons/fa";
 import axios from "axios";
 
 function ApplicationDetailsPage() {
@@ -56,7 +57,14 @@ function ApplicationDetailsPage() {
       </Link>
 
       <section className="details-card">
-        <p className="details-eyebrow">Application Details</p>
+        <div className="details-card__top-row">
+          <p className="details-eyebrow">Application Details</p>
+
+          <Link to={`/applications/${application.id}/edit`} className="edit-button">
+            <FaPen aria-hidden="true" />
+            <span>Edit application</span>
+          </Link>
+        </div>
 
         <h1>{application.company}</h1>
         <p className="details-role">{application.role}</p>

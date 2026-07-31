@@ -15,6 +15,7 @@ body {
   background: linear-gradient(180deg, #f7f4ef 0%, #eef3f8 100%);
   color: #1f2933;
 }
+
 .details-page {
   width: min(900px, 100%);
   margin: 0 auto;
@@ -27,6 +28,27 @@ body {
   color: #314652;
   font-weight: 700;
   text-decoration: none;
+}
+
+.edit-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #d9ccb7;
+  color: #22313a;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.edit-button:hover,
+.edit-button:focus-visible {
+  background: #cbb89a;
+}
+
+.edit-button svg {
+  font-size: 0.9rem;
 }
 
 .back-link:hover,
@@ -100,6 +122,7 @@ body {
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.88);
 }
+
 .application-form {
   display: grid;
   gap: 14px;

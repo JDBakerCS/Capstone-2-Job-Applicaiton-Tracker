@@ -49,4 +49,26 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.patch("/applications/:id", async (req, res, next) => {
+  try {
+    const { company, role, status, notes } = req.body;
+    const application = await JobApplication.findByPk(req.params.id);
+
+    if (!application) {
+      return res.sendStatus(404)
+    }
+
+    await application.update({
+      company,
+      role,
+      status,
+      notes,
+    })
+
+    res.json(application);
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router;
