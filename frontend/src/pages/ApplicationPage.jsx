@@ -39,8 +39,8 @@ function ApplicationPage() {
                     <p className="total-card__label">Total applications</p>
                     <p className="total-card__value">{applications.length}</p>
                 </aside>
-                <Link to="/create" className="create-application-button">
-                    Create application
+                <Link to="/create" className="home-create-application-button">
+                    Create Job Application
                 </Link>
 
             </section>

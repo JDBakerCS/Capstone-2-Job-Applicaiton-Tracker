@@ -60,12 +60,35 @@
 .applications-dashboard h2 {
   margin-top: 0;
 }
+.home-create-application-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 12px;
+  min-width: 180px;
+  min-height: 108px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #d9ccb7;
+  color: #22313a;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(31, 41, 51, 0.08);
+}
+
+.home-create-application-button:hover,
+.home-create-application-button:focus-visible {
+  background: #cbb89a;
+  outline: 2px solid #314652;
+  outline-offset: 2px;
+}
 
 .create-application-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 24px;
+  margin-left: 12px;
   padding: 12px 18px;
   border: none;
   border-radius: 12px;
@@ -87,8 +110,8 @@
 
 .home-hero__action-card,
 .create-application-button {
-  min-width: 180px;
-  min-height: 105px;
+  min-width: 165px;
+  min-height: 75px;
   padding: 18px;
   border-radius: 16px;
   text-align: center;

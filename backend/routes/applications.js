@@ -49,22 +49,24 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.patch("/applications/:id", async (req, res, next) => {
+router.patch("/:id", async (req, res, next) => {
   try {
-    const { company, role, status, notes } = req.body;
     const application = await JobApplication.findByPk(req.params.id);
 
     if (!application) {
       return res.sendStatus(404)
     }
 
-    await application.update({
-      company,
-      role,
-      status,
-      notes,
-    })
+    const changes = {};
 
+    if (req.body.company !== undefined) changes.company = req.body.company;
+    if (req.body.role !== undefined) changes.role = req.body.role;
+    if (req.body.status !== undefined) changes.status = req.body.status;
+    if (req.body.notes !== undefined) changes.notes = req.body.notes;
+
+
+    await application.update(changes);
+    console.log("PATCH hit:", req.params.id, req.body);
     res.json(application);
   } catch (error) {
     next(error)
