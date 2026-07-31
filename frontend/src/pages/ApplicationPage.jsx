@@ -1,28 +1,39 @@
 import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 
 function ApplicationPage() {
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true);
+    const [searchParams] = useSearchParams();
+    const rawUserId = searchParams.get("userId");
+    const rawUserName = searchParams.get("userName");
 
+    const userId = rawUserId && rawUserId !== "null" ? rawUserId : "2";
+    const userName =
+        rawUserName && rawUserName !== "null" ? rawUserName : "maria_dev";
 
     useEffect(() => {
         async function getApplications() {
             try {
-                const response = await axios.get("http://localhost:3000/api/applications");
+                const response = await axios.get(
+                    "http://localhost:3000/api/applications",
+                    {
+                        params: { userId },
+                    }
+                );
 
-                const sortEarliestFirstApplications =
-                    [...response.data].sort((a, b) => b.id - a.id);
-
-                setApplications(sortEarliestFirstApplications);
+                const sortedApplications = [...response.data].sort((a, b) => b.id - a.id);
+                setApplications(sortedApplications);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setLoading(false);
             }
         }
         getApplications();
-    }, []);
+    }, [userId]);
 
     return (
         <main className="home-page">
@@ -39,8 +50,11 @@ function ApplicationPage() {
                     <p className="total-card__label">Total applications</p>
                     <p className="total-card__value">{applications.length}</p>
                 </aside>
-                <Link to="/create" className="home-create-application-button">
-                    Create Job Application
+                <Link
+                    className="home-create-application-button"
+                    to={`/applications/new?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+                >
+                    Create application
                 </Link>
 
             </section>
@@ -64,7 +78,7 @@ function ApplicationPage() {
                             <span className="status-pill">{application.status}</span>
                             <span>{new Date(application.updatedAt).toLocaleDateString()}</span>
                             <Link
-                                to={`/applications/${application.id}`}
+                                to={`/applications/${application.id}?userId=${userId}&userName=${encodeURIComponent(userName)}`}
                                 className="details-link"
                             >
                                 View details

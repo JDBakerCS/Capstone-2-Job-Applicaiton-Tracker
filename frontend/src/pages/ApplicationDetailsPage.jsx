@@ -1,13 +1,24 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { FaPen } from "react-icons/fa";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { FaPen, FaTrash } from "react-icons/fa";
+
 import axios from "axios";
 
 function ApplicationDetailsPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [application, setApplication] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchParams] = useSearchParams();
+
+  const rawUserId = searchParams.get("userId");
+  const rawUserName = searchParams.get("userName");
+
+  const userId = rawUserId && rawUserId !== "null" ? rawUserId : "2";
+  const userName =
+    rawUserName && rawUserName !== "null" ? rawUserName : "maria_dev";
+
 
   useEffect(() => {
     async function getApplication() {
@@ -15,7 +26,10 @@ function ApplicationDetailsPage() {
         setError("");
 
         const response = await axios.get(
-          `http://localhost:3000/api/applications/${id}`
+          `http://localhost:3000/api/applications/${id}`,
+          {
+            params: { userId },
+          }
         );
 
         setApplication(response.data);
@@ -33,7 +47,31 @@ function ApplicationDetailsPage() {
     }
 
     getApplication();
-  }, [id]);
+  }, [id, userId]);
+
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      userName
+        ? `Delete application, ${userName}?`
+        : "Are you TRULY sure??"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+    try {
+      await axios.delete(`http://localhost:3000/api/applications/${id}`, {
+        params: { userId }
+      });
+      window.alert("Application deleted.")
+
+      navigate(`/?userId=${userId}&userName=${encodeURIComponent(userName)}`);
+
+    } catch (error) {
+      console.error(error);
+      window.alert("Could not delete application.")
+    }
+  }
 
   if (loading) {
     return <p className="details-message">Patience is a virue...</p>;
@@ -43,7 +81,10 @@ function ApplicationDetailsPage() {
     return (
       <main className="details-page">
         <p className="details-message">{error}</p>
-        <Link to="/" className="back-link">
+        <Link
+          to={`/?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+          className="back-link"
+        >
           Back to applications
         </Link>
       </main>
@@ -52,7 +93,10 @@ function ApplicationDetailsPage() {
 
   return (
     <main className="details-page">
-      <Link to="/" className="back-link">
+      <Link
+        to={`/?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+        className="back-link"
+      >
         Back to applications
       </Link>
 
@@ -60,10 +104,18 @@ function ApplicationDetailsPage() {
         <div className="details-card__top-row">
           <p className="details-eyebrow">Application Details</p>
 
-          <Link to={`/applications/${application.id}/edit`} className="edit-button">
-            <FaPen aria-hidden="true" />
-            <span>Edit application</span>
-          </Link>
+          <div className="details-card__actions">
+            <Link className="edit-button"
+              to={`/applications/${application.id}/edit?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+            >
+              <FaPen aria-hidden="true" />
+              <span>Edit application</span>
+            </Link>
+            <button type="button" onClick={handleDelete} className="edit-button">
+              <FaTrash aria-hidden="true" />
+              <span>Delete application</span>
+            </button>
+          </div>
         </div>
 
         <h1>{application.company}</h1>

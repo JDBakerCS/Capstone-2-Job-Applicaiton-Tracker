@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 
 const statusOptions = [
@@ -32,6 +32,10 @@ function EditApplicationPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [saveMessage, setSaveMessage] = useState("")
+    const [searchParams] = useSearchParams();
+
+    const userId = searchParams.get("userId");
+    const userName = searchParams.get("userName");
 
 
     useEffect(() => {
@@ -39,8 +43,9 @@ function EditApplicationPage() {
             try {
                 setError("");
 
-                const response = await axios.get(`http://localhost:3000/api/applications/${id}`)
-
+                const response = await axios.get(`http://localhost:3000/api/applications/${id}`, {
+                    params: { userId },
+                });
                 const application = response.data;
 
                 setOriginalApplication(application);
@@ -105,11 +110,15 @@ function EditApplicationPage() {
             setError("");
             setSaveMessage("");
 
-            await axios.patch(`http://localhost:3000/api/applications/${id}`,
-                changes
+            await axios.patch(
+                `http://localhost:3000/api/applications/${id}`,
+                changes,
+                {
+                    params: { userId },
+                }
             );
 
-            navigate(`/applications/${id}`);
+            navigate(`/applications/${id}?userId=${userId}&userName=${encodeURIComponent(userName)}`);
         } catch (error) {
             console.error(error);
             setError("Could not update application.");
@@ -123,7 +132,8 @@ function EditApplicationPage() {
         return (
             <main className="details-page">
                 <p className="details-message">{error}</p>
-                <Link to={`/applications/${id}`} className="back-link">
+                <Link to={`/applications/${id}?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+                >
                     Back to details
                 </Link>
             </main>

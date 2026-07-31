@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 const statusOptions = [
@@ -19,7 +19,10 @@ Extra notes:`;
 
 function NewApplicationPage() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
+    const userId = searchParams.get("userId");
+    const userName = searchParams.get("userName");
     const [formData, setFormData] = useState({
         company: "",
         role: "",
@@ -44,7 +47,9 @@ function NewApplicationPage() {
         try {
             setErrorMessage("");
 
-            await axios.post("http://localhost:3000/api/applications", formData);
+            await axios.post("http://localhost:3000/api/applications", formData, {
+                params: { userId },
+            });
 
             alert("Application created!");
 
@@ -55,15 +60,29 @@ function NewApplicationPage() {
                 notes: "",
             });
 
-            navigate("/");
+            navigate(`/?userId=${userId}&userName=${encodeURIComponent(userName)}`);
+
         } catch (error) {
             console.error(error);
             setErrorMessage("Could not create application.");
         }
     }
+    if (!userId || userId === "null") {
+        return (
+            <main className="details-page">
+                <p className="details-message">
+                    Please choose a user before creating an application.
+                </p>
+                <Link to="/" className="back-link">
+                    Back to applications
+                </Link>
+            </main>
+        );
+    }
     return (
         <main className="details-page">
-            <Link to="/" className="back-link">
+            <Link to={`/?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+                className="back-link">
                 Back to applications
             </Link>
 

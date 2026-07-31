@@ -231,10 +231,14 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
-  border-radius: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
   background: #d9ccb7;
-  color: #22313a;
-  text-decoration: none;
+  color: #102733;
+  font: inherit;
   font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  margin-left: .75rem;
 }
