@@ -57,7 +57,7 @@ router.post("/", async (req, res, next) => {
   try {
     const currentUserId = getCurrentUserId(req)
     if (!currentUserId) {
-      return res.status(404).json({ message: "userId is required" })
+      return res.status(400).json({ message: "userId is required" })
     }
 
 
@@ -88,7 +88,7 @@ router.patch("/:id", async (req, res, next) => {
     const currentUserId = getCurrentUserId(req)
 
     if (!currentUserId) {
-      return res.status(404).json({ message: "userId is required" })
+      return res.status(400).json({ message: "userId is required" })
     }
 
     const application = await JobApplication.findOne({

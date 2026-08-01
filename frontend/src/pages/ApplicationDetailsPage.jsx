@@ -52,8 +52,8 @@ function ApplicationDetailsPage() {
   async function handleDelete() {
     const confirmed = window.confirm(
       userName
-        ? `Delete application, ${userName}?`
-        : "Are you TRULY sure??"
+        ? `Are you TRULY sure?, ${userName}?`
+        : "Delete Application?"
     );
 
     if (!confirmed) {
@@ -63,7 +63,7 @@ function ApplicationDetailsPage() {
       await axios.delete(`http://localhost:3000/api/applications/${id}`, {
         params: { userId }
       });
-      window.alert("Application deleted.")
+      window.alert("A moment of silence for an opportunity squandered...")
 
       navigate(`/?userId=${userId}&userName=${encodeURIComponent(userName)}`);
 

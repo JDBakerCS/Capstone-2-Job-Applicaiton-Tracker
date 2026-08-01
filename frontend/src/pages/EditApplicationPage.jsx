@@ -194,7 +194,7 @@ function EditApplicationPage() {
                         value={formData.notes}
                         onChange={handleChange}
                         placeholder={notesPlaceholder}
-                        rows="7"
+                        rows="6"
                     />
 
                     <button type="submit" className="create-application-button">

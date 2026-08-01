@@ -1,18 +1,34 @@
 import { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
+const temporaryUsers = [
+    {
+        id: "2",
+        username: "maria_dev",
+        label: "Maria",
+    },
+    {
+        id: "4",
+        username: "james_dev",
+        label: "James",
+    },
+];
 
 function ApplicationPage() {
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true);
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     const rawUserId = searchParams.get("userId");
     const rawUserName = searchParams.get("userName");
 
     const userId = rawUserId && rawUserId !== "null" ? rawUserId : "2";
     const userName =
         rawUserName && rawUserName !== "null" ? rawUserName : "maria_dev";
+
+    const selectedUser =
+        temporaryUsers.find((user) => user.id === userId) || temporaryUsers[0];
 
     useEffect(() => {
         async function getApplications() {
@@ -35,6 +51,17 @@ function ApplicationPage() {
         getApplications();
     }, [userId]);
 
+    function handleUserChange(event) {
+        const nextUser = temporaryUsers.find(
+            (user) => user.id === event.target.value
+        )
+        if (!nextUser) {
+            return;
+        }
+        navigate(`/?userId=${nextUser.id}&userName=${encodeURIComponent(nextUser.username)}`);
+
+    }
+
     return (
         <main className="home-page">
             <section className="home-page-hero">
@@ -46,13 +73,23 @@ function ApplicationPage() {
                         to do next.
                     </p>
                 </div>
+                <label className="user-selector">
+                    <span>Viewing as</span>
+                    <select value={selectedUser.id} onChange={handleUserChange}>
+                        {temporaryUsers.map((user) => (
+                            <option key={user.id} value={user.id}>
+                                {user.label}
+                            </option>
+                        ))}
+                    </select>
+                </label>
                 <aside className="home-hero__total-card" aria-label="Application summary">
                     <p className="total-card__label">Total applications</p>
                     <p className="total-card__value">{applications.length}</p>
                 </aside>
                 <Link
                     className="home-create-application-button"
-                    to={`/applications/new?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+                    to={`/applications/new?userId=${selectedUser.id}&userName=${encodeURIComponent(selectedUser.username)}`}
                 >
                     Create application
                 </Link>
@@ -78,7 +115,7 @@ function ApplicationPage() {
                             <span className="status-pill">{application.status}</span>
                             <span>{new Date(application.updatedAt).toLocaleDateString()}</span>
                             <Link
-                                to={`/applications/${application.id}?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+                                to={`/applications/${application.id}?userId=${selectedUser.id}&userName=${encodeURIComponent(selectedUser.username)}`}
                                 className="details-link"
                             >
                                 View details
