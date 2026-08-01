@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
@@ -16,6 +17,7 @@ const temporaryUsers = [
 ];
 
 function ApplicationPage() {
+    const { loginWithRedirect, logout, isAuthenticated, user, isLoading, error } = useAuth0();
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true);
     const [searchParams] = useSearchParams();
@@ -61,6 +63,13 @@ function ApplicationPage() {
         navigate(`/?userId=${nextUser.id}&userName=${encodeURIComponent(nextUser.username)}`);
 
     }
+    if (isLoading) {
+        return <p className="details-message">Checking login...</p>;
+    }
+
+    if (error) {
+        return <p className="details-message">Login error: {error.message}</p>;
+    }
 
     return (
         <main className="home-page">
@@ -73,6 +82,7 @@ function ApplicationPage() {
                         to do next.
                     </p>
                 </div>
+
                 <label className="user-selector">
                     <span>Viewing as</span>
                     <select value={selectedUser.id} onChange={handleUserChange}>
@@ -83,6 +93,34 @@ function ApplicationPage() {
                         ))}
                     </select>
                 </label>
+                <div className="auth-actions">
+                    {isAuthenticated ? (
+                        <>
+                            <span>Signed in as {user?.name}</span>
+                            <button
+                                type="button"
+                                className="auth0-login-button"
+                                onClick={() =>
+                                    logout({
+                                        logoutParams: {
+                                            returnTo: window.location.origin,
+                                        },
+                                    })
+                                }
+                            >
+                                Log out
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            type="button"
+                            className="home-create-application-button"
+                            onClick={() => loginWithRedirect()}
+                        >
+                            Log in
+                        </button>
+                    )}
+                </div>
                 <aside className="home-hero__total-card" aria-label="Application summary">
                     <p className="total-card__label">Total applications</p>
                     <p className="total-card__value">{applications.length}</p>
