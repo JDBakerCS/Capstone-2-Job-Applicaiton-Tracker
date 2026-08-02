@@ -21,6 +21,7 @@ function ApplicationPage() {
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true);
     const [searchParams] = useSearchParams();
+    const [syncedUser, setSyncedUser] = useState(null)
     const navigate = useNavigate();
     const rawUserId = searchParams.get("userId");
     const rawUserName = searchParams.get("userName");
@@ -32,13 +33,16 @@ function ApplicationPage() {
     const selectedUser =
         temporaryUsers.find((user) => user.id === userId) || temporaryUsers[0];
 
+    const activeUserId = syncedUser ? String(syncedUser.id) : selectedUser.id;
+    const activeUserName = syncedUser ? syncedUser.username : selectedUser.username;
+
     useEffect(() => {
         async function getApplications() {
             try {
                 const response = await axios.get(
                     "http://localhost:3000/api/applications",
                     {
-                        params: { userId },
+                        params: { userId: activeUserId },
                     }
                 );
 
@@ -51,7 +55,29 @@ function ApplicationPage() {
             }
         }
         getApplications();
-    }, [userId]);
+    }, [activeUserId]);
+
+    useEffect(() => {
+        async function syncAuth0User() {
+            if (!isAuthenticated || !user) {
+                return;
+            }
+            try {
+                const response = await axios.post("http://localhost:3000/api/users/sync", {
+                    auth0Sub: user.sub,
+                    username: user.name,
+                    email: user.email,
+                });
+
+                console.log("synced Auth0 user:", response.data)
+
+                setSyncedUser(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        syncAuth0User();
+    }, [isAuthenticated, user]);
 
     function handleUserChange(event) {
         const nextUser = temporaryUsers.find(
