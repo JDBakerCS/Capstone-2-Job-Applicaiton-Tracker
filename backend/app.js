@@ -5,7 +5,9 @@ require("dotenv").config();
 
 const db = require("./db");
 require("./models");
+
 const applicationsRouter = require("./routes/applications");
+const userRouter = require("./routes/users");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +17,7 @@ app.use(morgan("dev"));
 app.use(cors());
 
 app.use("/api/applications", applicationsRouter);
+app.use("/api/users", userRouter);
 
 
 function errorHandler(error, req, res, next) {

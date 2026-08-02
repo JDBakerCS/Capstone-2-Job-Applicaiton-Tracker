@@ -4,6 +4,11 @@ const db = require("../db")
 const User = db.define(
     "User",
     {
+        auth0Sub: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            unique: true,
+        },
         username: {
             type: DataTypes.STRING,
             allowNull: false,
