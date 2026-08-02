@@ -1,18 +1,19 @@
 const express = require("express")
 const { User } = require("../models")
-
+const checkJwt = require("../middleware/auth0");
 const router = express.Router();
 
-router.post("/sync", async (req, res, next) => {
+router.post("/sync", checkJwt, async (req, res, next) => {
     try {
         console.log("USERS SYNC ROUTE - NEW VERSION");
         console.log(req.body);
-        const { auth0Sub, username, email } = req.body;
+        const auth0Sub = req.auth.payload.sub;
+        const { username, email } = req.body;
 
-        if (!auth0Sub || !username || !email) {
+        if (!username || !email) {
             return res
                 .status(400)
-                .json({ message: "auth0Sub, username, and email are required." })
+                .json({ message: "username and email are required." });
         }
         let user = await User.findOne({
             where: { auth0Sub },

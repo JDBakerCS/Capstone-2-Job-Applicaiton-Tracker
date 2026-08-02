@@ -1,23 +1,19 @@
 const express = require("express");
 const { JobApplication } = require("../models");
+const checkJwt = require("../middleware/auth0");
+const attachCurrentUser = require("../middleware/currentUser");
+
 const router = express.Router();
 
-function getCurrentUserId(req) {
-  const userId = Number(req.query.userId);
+router.use(checkJwt);
+router.use(attachCurrentUser);
 
-  if (!Number.isInteger(userId)) {
-    return null;
-  }
 
-  return userId;
-}
+
 
 router.get("/", async (req, res, next) => {
   try {
-    const currentUserId = getCurrentUserId(req)
-    if (!currentUserId) {
-      return res.status(400).json({ message: "userId is required" })
-    }
+    const currentUserId = req.currentUser.id;
 
     const allApplications = await JobApplication.findAll({
       where: { userId: currentUserId },
@@ -31,10 +27,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
   try {
-    const currentUserId = getCurrentUserId(req)
-    if (!currentUserId) {
-      return res.status(400).json({ message: "userId is required" })
-    }
+    const currentUserId = req.currentUser.id;
 
     const application = await JobApplication.findOne({
       where: {
@@ -55,10 +48,7 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const currentUserId = getCurrentUserId(req)
-    if (!currentUserId) {
-      return res.status(400).json({ message: "userId is required" })
-    }
+    const currentUserId = req.currentUser.id;
 
 
     const { company, role, status, notes } = req.body;
@@ -74,7 +64,7 @@ router.post("/", async (req, res, next) => {
       role,
       status,
       notes,
-      userId: currentUserId, // temporary until auth is added
+      userId: currentUserId, 
     });
 
     res.status(201).json(newApplication);
@@ -85,11 +75,7 @@ router.post("/", async (req, res, next) => {
 
 router.patch("/:id", async (req, res, next) => {
   try {
-    const currentUserId = getCurrentUserId(req)
-
-    if (!currentUserId) {
-      return res.status(400).json({ message: "userId is required" })
-    }
+    const currentUserId = req.currentUser.id;
 
     const application = await JobApplication.findOne({
       where: {
@@ -119,14 +105,12 @@ router.patch("/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const applicationId = Number(req.params.id);
-    const currentUserId = Number(req.query.userId);
+    const currentUserId = req.currentUser.id;
 
     // console.log("DELETE route hit");
     // console.log({ applicationId, currentUserId });
 
-    if (!currentUserId) {
-      return res.status(400).json({ message: "userId is required" });
-    }
+
 
     const deletedCount = await JobApplication.destroy({
       where: {

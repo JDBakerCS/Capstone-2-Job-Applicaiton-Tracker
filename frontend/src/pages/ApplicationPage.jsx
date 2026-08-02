@@ -6,7 +6,16 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 function ApplicationPage() {
-    const { loginWithRedirect, logout, isAuthenticated, user, isLoading, error } = useAuth0();
+    const {
+        loginWithRedirect,
+        logout,
+        isAuthenticated,
+        user,
+        isLoading,
+        error,
+        getAccessTokenSilently,
+    } = useAuth0();
+
     const [syncedUser, setSyncedUser] = useState(null);
     const [applications, setApplications] = useState([]);
 
@@ -20,8 +29,12 @@ function ApplicationPage() {
             }
 
             try {
+                const token = await getAccessTokenSilently();
+
                 const response = await axios.get(`${API_URL}/api/applications`, {
-                    params: { userId: activeUserId },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
 
                 const sortedApplications = [...response.data].sort((a, b) => b.id - a.id);
@@ -32,7 +45,7 @@ function ApplicationPage() {
         }
 
         getApplications();
-    }, [activeUserId]);
+    }, [activeUserId, getAccessTokenSilently]);
 
     useEffect(() => {
         async function syncAuth0User() {
@@ -42,11 +55,20 @@ function ApplicationPage() {
             }
 
             try {
-                const response = await axios.post(`${API_URL}/api/users/sync`, {
-                    auth0Sub: user.sub,
-                    username: user.email || user.name,
-                    email: user.email,
-                });
+                const token = await getAccessTokenSilently();
+
+                const response = await axios.post(
+                    `${API_URL}/api/users/sync`,
+                    {
+                        username: user.email || user.name,
+                        email: user.email,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
 
                 setSyncedUser(response.data);
             } catch (error) {
@@ -55,7 +77,7 @@ function ApplicationPage() {
         }
 
         syncAuth0User();
-    }, [isAuthenticated, user]);
+    }, [isAuthenticated, user, getAccessTokenSilently]);
 
     if (isLoading) {
         return <p className="details-message">Checking login...</p>;
