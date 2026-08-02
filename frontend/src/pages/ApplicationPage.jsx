@@ -18,6 +18,7 @@ const temporaryUsers = [
 
 function ApplicationPage() {
     const { loginWithRedirect, logout, isAuthenticated, user, isLoading, error } = useAuth0();
+    const [syncedUser, setSyncedUser] = useState(null);
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true);
     const [searchParams] = useSearchParams();
@@ -70,6 +71,26 @@ function ApplicationPage() {
                 });
 
                 console.log("synced Auth0 user:", response.data)
+
+                setSyncedUser(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        syncAuth0User();
+    }, [isAuthenticated, user]);
+
+    useEffect(() => {
+        async function syncAuth0User() {
+            if (!isAuthenticated || !user) {
+                return;
+            }
+            try {
+                const response = await axios.post("http://localhost:3000/api/users/sync", {
+                    auth0Sub: user.sub,
+                    username: user.name,
+                    email: user.email,
+                });
 
                 setSyncedUser(response.data);
             } catch (error) {
