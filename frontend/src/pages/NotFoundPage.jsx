@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 
 function NotFoundPage() {
     return (
-        <main className="details-page">
+        <main className="home-page not-found-page">
             <Link to="/" className="back-link" >
-            Back to applications
+                Back to applications
             </Link>
 
             <section className="details-card">

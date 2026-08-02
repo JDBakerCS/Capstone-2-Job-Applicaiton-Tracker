@@ -61,7 +61,7 @@ function ApplicationDetailsPage() {
       return;
     }
     try {
-      await axios.delete(`http://localhost:3001/api/applications/${id}`, {
+      await axios.delete(`${API_URL}/api/applications/${id}`, {
         params: { userId }
       });
       window.alert("A moment of silence for an opportunity squandered...")
@@ -75,7 +75,7 @@ function ApplicationDetailsPage() {
   }
 
   if (loading) {
-    return <p className="details-message">Patience is a virue...</p>;
+    return <p className="details-message">Patience is a virtue...</p>;
   }
 
   if (error) {

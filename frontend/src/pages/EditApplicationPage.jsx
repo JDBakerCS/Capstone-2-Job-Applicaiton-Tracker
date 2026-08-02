@@ -133,7 +133,9 @@ function EditApplicationPage() {
         return (
             <main className="details-page">
                 <p className="details-message">{error}</p>
-                <Link to={`/applications/${id}?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+                <Link
+                    to={`/applications/${id}?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+                    className="back-link"
                 >
                     Back to details
                 </Link>
@@ -142,7 +144,7 @@ function EditApplicationPage() {
     }
     return (
         <main className="details-page">
-            <Link to={`/applications/${id}`} className="back-link">
+            <Link to={`/applications/${id}?userId=${userId}&userName=${encodeURIComponent(userName)}`} className="back-link">
                 Back to details
             </Link>
 
@@ -214,3 +216,4 @@ function EditApplicationPage() {
 
 
 export default EditApplicationPage;
+
