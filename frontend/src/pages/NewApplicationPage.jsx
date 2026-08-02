@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const statusOptions = [
     "Interested",
@@ -47,7 +48,7 @@ function NewApplicationPage() {
         try {
             setErrorMessage("");
 
-            await axios.post("http://localhost:3000/api/applications", formData, {
+            await axios.post(`${API_URL}/api/applications`, formData, {
                 params: { userId },
             });
 

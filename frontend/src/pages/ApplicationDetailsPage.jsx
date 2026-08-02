@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { FaPen, FaTrash } from "react-icons/fa";
+const API_URL = import.meta.env.VITE_API_URL;
 
 import axios from "axios";
 
@@ -26,7 +27,7 @@ function ApplicationDetailsPage() {
         setError("");
 
         const response = await axios.get(
-          `http://localhost:3000/api/applications/${id}`,
+          `${API_URL}/api/applications/${id}`,
           {
             params: { userId },
           }
@@ -60,7 +61,7 @@ function ApplicationDetailsPage() {
       return;
     }
     try {
-      await axios.delete(`http://localhost:3000/api/applications/${id}`, {
+      await axios.delete(`http://localhost:3001/api/applications/${id}`, {
         params: { userId }
       });
       window.alert("A moment of silence for an opportunity squandered...")

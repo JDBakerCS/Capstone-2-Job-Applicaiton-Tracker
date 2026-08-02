@@ -2,6 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const temporaryUsers = [
     {
@@ -22,7 +23,6 @@ function ApplicationPage() {
     const [applications, setApplications] = useState([])
     const [loading, setLoading] = useState(true);
     const [searchParams] = useSearchParams();
-    const [syncedUser, setSyncedUser] = useState(null)
     const navigate = useNavigate();
     const rawUserId = searchParams.get("userId");
     const rawUserName = searchParams.get("userName");
@@ -41,7 +41,7 @@ function ApplicationPage() {
         async function getApplications() {
             try {
                 const response = await axios.get(
-                    "http://localhost:3000/api/applications",
+                    `${API_URL}/api/applications`,
                     {
                         params: { userId: activeUserId },
                     }
@@ -58,27 +58,6 @@ function ApplicationPage() {
         getApplications();
     }, [activeUserId]);
 
-    useEffect(() => {
-        async function syncAuth0User() {
-            if (!isAuthenticated || !user) {
-                return;
-            }
-            try {
-                const response = await axios.post("http://localhost:3000/api/users/sync", {
-                    auth0Sub: user.sub,
-                    username: user.name,
-                    email: user.email,
-                });
-
-                console.log("synced Auth0 user:", response.data)
-
-                setSyncedUser(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        syncAuth0User();
-    }, [isAuthenticated, user]);
 
     useEffect(() => {
         async function syncAuth0User() {
@@ -86,11 +65,12 @@ function ApplicationPage() {
                 return;
             }
             try {
-                const response = await axios.post("http://localhost:3000/api/users/sync", {
+                const response = await axios.post(`${API_URL}/api/users/sync`, {
                     auth0Sub: user.sub,
-                    username: user.name,
+                    username: user.email || user.name,
                     email: user.email,
                 });
+                console.log("synced Auth0 user:", response.data);
 
                 setSyncedUser(response.data);
             } catch (error) {
@@ -174,7 +154,7 @@ function ApplicationPage() {
                 </aside>
                 <Link
                     className="home-create-application-button"
-                    to={`/applications/new?userId=${selectedUser.id}&userName=${encodeURIComponent(selectedUser.username)}`}
+                    to={`/applications/new?userId=${activeUserId}&userName=${encodeURIComponent(activeUserName)}`}
                 >
                     Create application
                 </Link>
@@ -200,7 +180,7 @@ function ApplicationPage() {
                             <span className="status-pill">{application.status}</span>
                             <span>{new Date(application.updatedAt).toLocaleDateString()}</span>
                             <Link
-                                to={`/applications/${application.id}?userId=${selectedUser.id}&userName=${encodeURIComponent(selectedUser.username)}`}
+                                to={`/applications/${application.id}?userId=${activeUserId}&userName=${encodeURIComponent(activeUserName)}`}
                                 className="details-link"
                             >
                                 View details

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const statusOptions = [
@@ -43,7 +44,7 @@ function EditApplicationPage() {
             try {
                 setError("");
 
-                const response = await axios.get(`http://localhost:3000/api/applications/${id}`, {
+                const response = await axios.get(`${API_URL}/api/applications/${id}`, {
                     params: { userId },
                 });
                 const application = response.data;
@@ -111,7 +112,7 @@ function EditApplicationPage() {
             setSaveMessage("");
 
             await axios.patch(
-                `http://localhost:3000/api/applications/${id}`,
+                `${API_URL}/api/applications/${id}`,
                 changes,
                 {
                     params: { userId },
