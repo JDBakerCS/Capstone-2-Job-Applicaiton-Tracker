@@ -19,9 +19,9 @@ app.use(cors());
 app.use("/api/applications", applicationsRouter);
 app.use("/api/users", userRouter);
 
-app.get("/debug/ping", (req, res) => {
-  res.json({ message: "fresh app.js is running" });
-});
+// app.get("/debug/ping", (req, res) => {
+//   res.json({ message: "fresh app.js is running" });
+// });
 
 
 function errorHandler(error, req, res, next) {
