@@ -321,3 +321,219 @@
   min-height: 64px;
   margin-left: 0;
 }
+
+/* Mobile responsive polish */
+.home-page-hero {
+  gap:  16px;
+}
+
+.auth-actions {
+  display:  flex;
+  flex-direction:  column;
+  gap:  8px;
+  margin-left:  24px;
+  color:  #22313a;
+  font-weight:  600;
+}
+
+.auth0-login-button {
+  align-self:  flex-start;
+  padding:  8px 12px;
+  border:  none;
+  border-radius:  10px;
+  background:  #314652;
+  color:  #f5efe3;
+  font:  inherit;
+  font-weight:  700;
+  cursor:  pointer;
+}
+
+.details-card__actions {
+  display:  flex;
+  justify-content:  flex-end;
+  gap:  10px;
+  flex-wrap:  wrap;
+}
+
+@media (max-width: 900px) {
+  .home-page {
+    padding:  28px 16px;
+  }
+
+  .home-page-hero {
+    align-items:  stretch;
+    flex-wrap:  wrap;
+  }
+
+  .home-page-hero div:first-child {
+    flex:  1 1 100%;
+  }
+
+  .auth-actions {
+    flex:  1 1 220px;
+    margin-left:  0;
+  }
+
+  .home-hero__total-card,
+   .home-create-application-button {
+    flex:  1 1 180px;
+    min-width:  0;
+    min-height:  88px;
+    margin-left:  0;
+  }
+
+  .applications-dashboard {
+    padding:  22px 18px;
+  }
+
+  .applications-legend {
+    display:  none;
+  }
+
+  .application-pill {
+    grid-template-columns:  1fr;
+    gap:  10px;
+    padding:  16px;
+    border-radius:  18px;
+  }
+
+  .application-pill span:not(.status-pill) {
+    display:  grid;
+    grid-template-columns:  86px 1fr;
+    gap:  10px;
+    align-items:  baseline;
+  }
+
+  .application-pill span:not(.status-pill)::before,
+   .application-pill .status-pill::before {
+    color:  #716653;
+    font-size:  .78rem;
+    font-weight:  800;
+    letter-spacing:  .04em;
+    text-transform:  uppercase;
+  }
+
+  .application-pill span:nth-child(1)::before {
+    content:  "Company";
+  }
+
+  .application-pill span:nth-child(2)::before {
+    content:  "Role";
+  }
+
+  .application-pill .status-pill {
+    justify-content:  flex-start;
+    gap:  10px;
+    width:  100%;
+    border-radius:  14px;
+  }
+
+  .application-pill .status-pill::before {
+    content:  "Status";
+  }
+
+  .application-pill span:nth-child(4)::before {
+    content:  "Updated";
+  }
+
+  .details-link {
+    justify-self:  stretch;
+    padding:  10px 14px;
+    border-radius:  14px;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .app-background,
+   .home-page {
+    background-attachment:  scroll;
+  }
+
+  .home-page {
+    padding:  18px 12px;
+  }
+
+  .home-page-hero,
+   .applications-dashboard,
+   .details-card,
+   .login-card {
+    border-radius:  18px;
+  }
+
+  .home-page-hero,
+   .applications-dashboard {
+    padding:  18px;
+  }
+
+  .home-page-hero h1,
+   .details-card h1,
+   .login-card h1 {
+    font-size:  1.85rem;
+    line-height:  1.1;
+  }
+
+  .lead {
+    font-size:  1rem;
+  }
+
+  .auth-actions,
+   .home-hero__total-card,
+   .home-create-application-button {
+    flex-basis:  100%;
+  }
+
+  .auth0-login-button,
+   .home-create-application-button,
+   .create-application-button {
+    width:  100%;
+  }
+
+  .details-page {
+    padding:  24px 12px;
+  }
+
+  .details-card {
+    padding:  20px;
+  }
+
+  .details-card__top-row,
+   .details-card__actions {
+    align-items:  stretch;
+    flex-direction:  column;
+  }
+
+  .edit-button {
+    justify-content:  center;
+    width:  100%;
+    margin-left:  0;
+  }
+
+  .details-meta {
+    grid-template-columns:  1fr;
+  }
+
+  .notes-card {
+    padding:  16px;
+  }
+
+  .application-form button,
+   .create-application-button {
+    margin-left:  0;
+  }
+
+  .login-page {
+    padding:  20px 12px;
+  }
+
+  .login-card {
+    min-height:  360px;
+    padding:  28px 22px;
+  }
+
+  .not-found-page .back-link,
+   .not-found-page .details-card {
+    width:  100%;
+  }
+
+}
