@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 const API_URL = import.meta.env.VITE_API_URL;
 
 
@@ -21,6 +22,7 @@ Extra notes:`;
 
 
 function EditApplicationPage() {
+    const { getAccessTokenSilently } = useAuth0();
     const { id } = useParams();
     const navigate = useNavigate();
     const [originalApplication, setOriginalApplication] = useState(null);
@@ -33,10 +35,7 @@ function EditApplicationPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [saveMessage, setSaveMessage] = useState("")
-    const [searchParams] = useSearchParams();
 
-    const userId = searchParams.get("userId");
-    const userName = searchParams.get("userName");
 
 
     useEffect(() => {
@@ -44,8 +43,12 @@ function EditApplicationPage() {
             try {
                 setError("");
 
+                const token = await getAccessTokenSilently();
+
                 const response = await axios.get(`${API_URL}/api/applications/${id}`, {
-                    params: { userId },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
                 const application = response.data;
 
@@ -64,7 +67,7 @@ function EditApplicationPage() {
             }
         }
         getApplication();
-    }, [id]);
+    }, [id, getAccessTokenSilently]);
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -111,15 +114,19 @@ function EditApplicationPage() {
             setError("");
             setSaveMessage("");
 
+            const token = await getAccessTokenSilently();
+
             await axios.patch(
                 `${API_URL}/api/applications/${id}`,
                 changes,
                 {
-                    params: { userId },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 }
             );
 
-            navigate(`/applications/${id}?userId=${userId}&userName=${encodeURIComponent(userName)}`);
+            navigate(`/applications/${id}`);
         } catch (error) {
             console.error(error);
             setError("Could not update application.");
@@ -134,8 +141,7 @@ function EditApplicationPage() {
             <main className="details-page">
                 <p className="details-message">{error}</p>
                 <Link
-                    to={`/applications/${id}?userId=${userId}&userName=${encodeURIComponent(userName)}`}
-                    className="back-link"
+                    to={`/applications/${id}`} className="back-link"
                 >
                     Back to details
                 </Link>
@@ -144,7 +150,8 @@ function EditApplicationPage() {
     }
     return (
         <main className="details-page">
-            <Link to={`/applications/${id}?userId=${userId}&userName=${encodeURIComponent(userName)}`} className="back-link">
+            <Link
+                to={`/applications/${id}`} className="back-link">
                 Back to details
             </Link>
 

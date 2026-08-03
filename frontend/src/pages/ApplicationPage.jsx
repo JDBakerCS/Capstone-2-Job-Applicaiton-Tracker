@@ -20,7 +20,6 @@ function ApplicationPage() {
     const [applications, setApplications] = useState([]);
 
     const activeUserId = syncedUser ? String(syncedUser.id) : null;
-    const activeUserName = syncedUser ? syncedUser.username : "";
 
     useEffect(() => {
         async function getApplications() {
@@ -150,8 +149,7 @@ function ApplicationPage() {
 
                 <Link
                     className="home-create-application-button"
-                    to={`/applications/new?userId=${activeUserId}&userName=${encodeURIComponent(activeUserName)}`}
-                >
+                    to="/applications/new">
                     Create application
                 </Link>
             </section>
@@ -175,7 +173,7 @@ function ApplicationPage() {
                         </p>
                         <Link
                             className="details-link"
-                            to={`/applications/new?userId=${activeUserId}&userName=${encodeURIComponent(activeUserName)}`}
+                            to="/applications/new"
                         >
                             Create application
                         </Link>
@@ -189,7 +187,7 @@ function ApplicationPage() {
                                 <span className="status-pill">{application.status}</span>
                                 <span>{new Date(application.updatedAt).toLocaleDateString()}</span>
                                 <Link
-                                    to={`/applications/${application.id}?userId=${activeUserId}&userName=${encodeURIComponent(activeUserName)}`}
+                                    to={`/applications/${application.id}`}
                                     className="details-link"
                                 >
                                     View details

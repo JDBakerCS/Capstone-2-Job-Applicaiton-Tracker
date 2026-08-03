@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const statusOptions = [
@@ -19,11 +20,9 @@ Application URL:
 Extra notes:`;
 
 function NewApplicationPage() {
+    const { getAccessTokenSilently } = useAuth0();
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
 
-    const userId = searchParams.get("userId");
-    const userName = searchParams.get("userName");
     const [formData, setFormData] = useState({
         company: "",
         role: "",
@@ -48,8 +47,12 @@ function NewApplicationPage() {
         try {
             setErrorMessage("");
 
+            const token = await getAccessTokenSilently();
+
             await axios.post(`${API_URL}/api/applications`, formData, {
-                params: { userId },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             alert("Application created!");
@@ -61,29 +64,16 @@ function NewApplicationPage() {
                 notes: "",
             });
 
-            navigate(`/?userId=${userId}&userName=${encodeURIComponent(userName)}`);
-
+            navigate("/");
         } catch (error) {
             console.error(error);
             setErrorMessage("Could not create application.");
         }
     }
-    if (!userId || userId === "null") {
-        return (
-            <main className="details-page">
-                <p className="details-message">
-                    Please choose a user before creating an application.
-                </p>
-                <Link to="/" className="back-link">
-                    Back to applications
-                </Link>
-            </main>
-        );
-    }
+
     return (
         <main className="details-page">
-            <Link to={`/?userId=${userId}&userName=${encodeURIComponent(userName)}`}
-                className="back-link">
+            <Link to="/" className="back-link">
                 Back to applications
             </Link>
 

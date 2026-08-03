@@ -1,24 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaPen, FaTrash } from "react-icons/fa";
+import { useAuth0 } from "@auth0/auth0-react";
 const API_URL = import.meta.env.VITE_API_URL;
 
 import axios from "axios";
 
 function ApplicationDetailsPage() {
+  const { getAccessTokenSilently } = useAuth0();
   const { id } = useParams();
   const navigate = useNavigate();
   const [application, setApplication] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searchParams] = useSearchParams();
-
-  const rawUserId = searchParams.get("userId");
-  const rawUserName = searchParams.get("userName");
-
-  const userId = rawUserId && rawUserId !== "null" ? rawUserId : "2";
-  const userName =
-    rawUserName && rawUserName !== "null" ? rawUserName : "maria_dev";
 
 
   useEffect(() => {
@@ -26,12 +20,13 @@ function ApplicationDetailsPage() {
       try {
         setError("");
 
-        const response = await axios.get(
-          `${API_URL}/api/applications/${id}`,
-          {
-            params: { userId },
-          }
-        );
+        const token = await getAccessTokenSilently();
+
+        const response = await axios.get(`${API_URL}/api/applications/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         setApplication(response.data);
       } catch (error) {
@@ -48,26 +43,25 @@ function ApplicationDetailsPage() {
     }
 
     getApplication();
-  }, [id, userId]);
+  }, [id, getAccessTokenSilently]);
 
   async function handleDelete() {
-    const confirmed = window.confirm(
-      userName
-        ? `Are you TRULY sure?, ${userName}?`
-        : "Delete Application?"
-    );
+    const confirmed = window.confirm("Delete this application?");
 
     if (!confirmed) {
       return;
     }
     try {
+      const token = await getAccessTokenSilently();
+
       await axios.delete(`${API_URL}/api/applications/${id}`, {
-        params: { userId }
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       window.alert("A moment of silence for an opportunity squandered...")
 
-      navigate(`/?userId=${userId}&userName=${encodeURIComponent(userName)}`);
-
+      navigate("/");
     } catch (error) {
       console.error(error);
       window.alert("Could not delete application.")
@@ -83,7 +77,7 @@ function ApplicationDetailsPage() {
       <main className="details-page">
         <p className="details-message">{error}</p>
         <Link
-          to={`/?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+          to="/"
           className="back-link"
         >
           Back to applications
@@ -95,7 +89,7 @@ function ApplicationDetailsPage() {
   return (
     <main className="details-page">
       <Link
-        to={`/?userId=${userId}&userName=${encodeURIComponent(userName)}`}
+        to="/"
         className="back-link"
       >
         Back to applications
@@ -106,14 +100,16 @@ function ApplicationDetailsPage() {
           <p className="details-eyebrow">Application Details</p>
 
           <div className="details-card__actions">
+            
             <Link className="edit-button"
-              to={`/applications/${application.id}/edit?userId=${userId}&userName=${encodeURIComponent(userName)}`}
-            >
+              to={`/applications/${application.id}/edit`}            >
               <FaPen aria-hidden="true" />
               <span>Edit application</span>
             </Link>
+            
             <button type="button" onClick={handleDelete} className="edit-button">
               <FaTrash aria-hidden="true" />
+              
               <span>Delete application</span>
             </button>
           </div>

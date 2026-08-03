@@ -5,8 +5,9 @@ const router = express.Router();
 
 router.post("/sync", checkJwt, async (req, res, next) => {
     try {
-        console.log("USERS SYNC ROUTE - NEW VERSION");
-        console.log(req.body);
+        // console.log("USERS SYNC ROUTE - NEW VERSION");
+        // console.log(req.body);
+        
         const auth0Sub = req.auth.payload.sub;
         const { username, email } = req.body;
 

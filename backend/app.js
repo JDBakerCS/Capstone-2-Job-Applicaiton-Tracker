@@ -19,10 +19,19 @@ app.use(cors());
 app.use("/api/applications", applicationsRouter);
 app.use("/api/users", userRouter);
 
+app.get("/debug/ping", (req, res) => {
+  res.json({ message: "fresh app.js is running" });
+});
+
 
 function errorHandler(error, req, res, next) {
   console.error(error);
-  res.status(500).json({ error: error.message || "Server Error" });
+
+  const status = error.status || error.statusCode || 500;
+
+  res.status(status).json({
+    error: error.message || "Server Error",
+  });
 }
 
 app.use(errorHandler);
@@ -33,7 +42,9 @@ async function startApp() {
 
   await db.sync();
 
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 }
 
 startApp().catch(console.error);
